@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NAV } from '../data/content.js'
+import { useT, useLang } from '../i18n.jsx'
 
 export const KidneyIcon = () => (
   <svg viewBox="0 0 64 64" aria-hidden="true">
@@ -9,6 +10,8 @@ export const KidneyIcon = () => (
 )
 
 export default function Nav() {
+  const t = useT()
+  const { lang, setLang } = useLang()
   const [active, setActive] = useState('model')
   const [progress, setProgress] = useState(0)
   useEffect(() => {
@@ -31,11 +34,15 @@ export default function Nav() {
   }, [active])
   return (
     <nav className="nav">
-      <a className="brand" href="#model"><KidneyIcon /> Почка</a>
+      <a className="brand" href="#model"><KidneyIcon /> {t.ui.brand}</a>
       <div className="nav-links">
-        {NAV.map(([id, label]) => (
+        {t.NAV.map(([id, label]) => (
           <a key={id} href={'#' + id} className={active === id ? 'active' : ''}>{label}</a>
         ))}
+      </div>
+      <div className="lang-switch" role="group" aria-label="Язык / Тіл">
+        <button className={lang === 'ru' ? 'on' : ''} onClick={() => setLang('ru')}>РУС</button>
+        <button className={lang === 'kk' ? 'on' : ''} onClick={() => setLang('kk')}>ҚАЗ</button>
       </div>
       <div className="progress" style={{ width: progress * 100 + '%' }} />
     </nav>

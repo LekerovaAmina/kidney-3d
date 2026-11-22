@@ -1,13 +1,14 @@
 import Section from '../components/Section.jsx'
-import { LOCATION } from '../data/content.js'
+import { useT } from '../i18n.jsx'
 
 const BEAN = 'M0,-36 C22,-36 30,-14 30,4 C30,26 18,36 2,36 C-12,36 -14,24 -8,14 C-4,8 -4,-4 -8,-10 C-14,-22 -14,-36 0,-36 Z'
 
 function BodySVG() {
+  const L = useT().ui.body
   const vertebrae = Array.from({ length: 16 }, (_, i) => 40 + i * 18)
   const ribs = [96, 112, 128, 144, 160, 176]
   return (
-    <svg className="body-svg" viewBox="0 0 300 420" role="img" aria-label="Расположение почек в теле">
+    <svg className="body-svg" viewBox="0 0 300 420" role="img" aria-label={L.aria}>
       <defs>
         <radialGradient id="kgrad" cx="40%" cy="35%">
           <stop offset="0" stopColor="#ff8a75" />
@@ -18,7 +19,7 @@ function BodySVG() {
         fill="rgba(255,220,210,0.05)" stroke="rgba(255,220,210,0.25)" strokeWidth="1.5" />
       {/* печень */}
       <path d="M58 132 C80 112 150 112 172 128 C160 150 120 166 70 170 C58 160 54 146 58 132 Z" fill="rgba(160,80,60,0.35)" />
-      <text x="70" y="128" fontSize="9" fill="#d9a89c">печень</text>
+      <text x="70" y="128" fontSize="9" fill="#d9a89c">{L.liver}</text>
       {/* позвоночник */}
       {vertebrae.map((y, i) => (
         <rect key={y} x="141" y={y} width="18" height="13" rx="3"
@@ -55,18 +56,18 @@ function BodySVG() {
       <path className="draw" d="M116 230 C120 290 132 340 142 368" stroke="#f2c766" strokeWidth="4" fill="none" strokeLinecap="round" />
       <path className="draw" d="M184 214 C180 290 168 340 158 368" stroke="#f2c766" strokeWidth="4" fill="none" strokeLinecap="round" />
       <ellipse cx="150" cy="378" rx="22" ry="15" fill="#e8c76b" opacity="0.9" />
-      <text x="176" y="398" fontSize="9" fill="#e8c76b">мочевой пузырь</text>
-      <text x="40" y="244" fontSize="10" fill="#fff" fontWeight="700">правая</text>
-      <text x="222" y="230" fontSize="10" fill="#fff" fontWeight="700">левая</text>
-      <text x="196" y="146" fontSize="8" fill="#e2a43c">надпочечник</text>
+      <text x="176" y="398" fontSize="9" fill="#e8c76b">{L.bladder}</text>
+      <text x="40" y="244" fontSize="10" fill="#fff" fontWeight="700">{L.right}</text>
+      <text x="222" y="230" fontSize="10" fill="#fff" fontWeight="700">{L.left}</text>
+      <text x="196" y="146" fontSize="8" fill="#e2a43c">{L.adrenal}</text>
     </svg>
   )
 }
 
 export default function Location() {
+  const { LOCATION } = useT()
   return (
-    <Section id="where" kicker="Анатомия" title="Где находятся почки"
-      lead="Почки — парный орган. Они расположены не в животе, как часто думают, а у задней стенки тела, по бокам позвоночника. Схема — вид спереди.">
+    <Section id="where">
       <div className="location">
         <BodySVG />
         <div className="loc-points">

@@ -1,11 +1,11 @@
 import Section from '../components/Section.jsx'
+import { useT } from '../i18n.jsx'
 import Counter from '../components/Counter.jsx'
-import { STATS } from '../data/content.js'
 
 export default function Numbers() {
+  const { STATS } = useT()
   return (
-    <Section id="numbers" kicker="В цифрах" title="Почка в цифрах"
-      lead="Небольшой орган размером с кулак выполняет колоссальную работу — каждую минуту, всю жизнь.">
+    <Section id="numbers">
       <div className="grid stats">
         {STATS.map((s) => (
           <div className="card stat" key={s.label}>

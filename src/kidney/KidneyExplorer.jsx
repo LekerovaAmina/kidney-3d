@@ -2,7 +2,8 @@ import { Suspense, useState, useCallback, useEffect, useRef } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, ContactShadows } from '@react-three/drei'
 import KidneyModel from './KidneyModel.jsx'
-import { PARTS, PART_ORDER } from '../data/parts.js'
+import { PART_ORDER } from '../data/parts.js'
+import { useT } from '../i18n.jsx'
 
 // На узких экранах (телефон) отодвигаем камеру, чтобы почка помещалась целиком
 function ResponsiveCamera() {
@@ -17,6 +18,9 @@ function ResponsiveCamera() {
 }
 
 export default function KidneyExplorer() {
+  const t = useT()
+  const PARTS = t.PARTS
+  const E = t.ui.explorer
   const [cut, setCut] = useState(false)
   const [flow, setFlow] = useState(true)
   const [labels, setLabels] = useState(() => typeof window === 'undefined' || window.innerWidth > 680)
@@ -70,6 +74,7 @@ export default function KidneyExplorer() {
           <pointLight position={[0, -2, 3]} intensity={6} color="#ff8a70" distance={8} />
           <Suspense fallback={null}>
             <KidneyModel
+              parts={PARTS}
               cut={cut}
               flow={flow}
               labels={labels && !step}
@@ -95,20 +100,20 @@ export default function KidneyExplorer() {
         {step && (
           <div className="build-caption" key={step.part}>
             <span className="dot" style={{ background: PARTS[step.part].color }} />
-            {step.text}
+            {t.BUILD_TEXT[step.part]}
           </div>
         )}
 
         <div className="explorer-toolbar">
-          <button className={'tbtn primary'} onClick={startBuild}>▶ Построить почку</button>
+          <button className={'tbtn primary'} onClick={startBuild}>{E.build}</button>
           <button className={'tbtn' + (cut ? ' on' : '')} onClick={() => setCut((v) => !v)}>
-            {cut ? 'Целая почка' : 'Разрез'}
+            {cut ? E.whole : E.cut}
           </button>
-          <button className={'tbtn' + (flow ? ' on' : '')} onClick={() => setFlow((v) => !v)}>Кровоток</button>
-          <button className={'tbtn' + (labels ? ' on' : '')} onClick={() => setLabels((v) => !v)}>Подписи</button>
-          <button className={'tbtn' + (rotate ? ' on' : '')} onClick={() => setRotate((v) => !v)}>Вращение</button>
+          <button className={'tbtn' + (flow ? ' on' : '')} onClick={() => setFlow((v) => !v)}>{E.flow}</button>
+          <button className={'tbtn' + (labels ? ' on' : '')} onClick={() => setLabels((v) => !v)}>{E.labels}</button>
+          <button className={'tbtn' + (rotate ? ' on' : '')} onClick={() => setRotate((v) => !v)}>{E.rotate}</button>
         </div>
-        <div className="explorer-hint">Крутите мышью / пальцем · колесо — масштаб · нажмите на любую часть</div>
+        <div className="explorer-hint">{E.hint}</div>
       </div>
 
       <aside className="explorer-panel">
@@ -142,16 +147,15 @@ export default function KidneyExplorer() {
             </>
           ) : (
             <>
-              <div className="part-kicker">Левая почка · вид спереди</div>
-              <h3>Выберите часть почки</h3>
+              <div className="part-kicker">{E.emptyKicker}</div>
+              <h3>{E.emptyTitle}</h3>
               <p>
-                Нажмите на любую структуру на модели или в списке выше. Включите <b>«Разрез»</b>, чтобы заглянуть
-                внутрь, или запустите <b>«Построить почку»</b> — модель соберётся слой за слоем.
+                {E.emptyText[0]}<b>{E.emptyText[1]}</b>{E.emptyText[2]}<b>{E.emptyText[3]}</b>{E.emptyText[4]}
               </p>
               <ul className="legend">
-                <li><i style={{ background: '#ff6b5e' }} /> артериальная кровь (к почке)</li>
-                <li><i style={{ background: '#8fb0ff' }} /> венозная кровь (от почки)</li>
-                <li><i style={{ background: '#fff2a8' }} /> моча (в разрезе)</li>
+                {E.legend.map((l, i) => (
+                  <li key={l}><i style={{ background: ['#ff6b5e', '#8fb0ff', '#fff2a8'][i] }} /> {l}</li>
+                ))}
               </ul>
             </>
           )}

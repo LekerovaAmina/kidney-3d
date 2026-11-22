@@ -60,6 +60,17 @@ b, strong { color: #fff; }
 .grid { display: grid; gap: 18px; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
 
+/* ---------- язык ---------- */
+.lang-switch { display: flex; flex: none; background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 99px; padding: 3px; }
+.lang-switch button { border: 0; background: transparent; color: var(--muted); font-weight: 800; font-size: 13px; padding: 6px 12px; border-radius: 99px; cursor: pointer; letter-spacing: .04em; }
+.lang-switch button.on { background: var(--red); color: #fff; }
+
+/* ---------- подпись лабораторной ---------- */
+.lab-badge { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 26px; padding: 12px 20px 12px 14px; border: 1px solid rgba(242,199,102,.35); background: linear-gradient(110deg, rgba(242,199,102,.12), rgba(226,80,63,.08)); border-radius: 18px; }
+.lab-badge .lab-ico { font-size: 26px; width: 44px; height: 44px; display: grid; place-items: center; background: rgba(242,199,102,.15); border-radius: 12px; }
+.lab-badge b { display: block; font-family: var(--head); font-size: 15px; font-weight: 600; color: var(--gold); }
+.lab-badge span { display: block; font-size: 15px; color: var(--text); }
+
 /* ---------- hero ---------- */
 .hero { position: relative; padding: clamp(40px, 6vw, 72px) clamp(16px, 5vw, 64px) 30px; max-width: 1320px; margin: 0 auto; }
 .hero-top { display: grid; grid-template-columns: 1.25fr 1fr; gap: 30px; align-items: end; margin-bottom: 26px; }
@@ -252,6 +263,8 @@ table.cmp th { font-family: var(--head); font-size: 13px; font-weight: 600; colo
 }
 @media (max-width: 680px) {
   body { font-size: 16px; }
+  .brand span, .nav .brand { font-size: 0; gap: 0; }
+  .lab-badge b, .lab-badge span { font-size: 13.5px; }
   .hero-top .lead { display: none; }
   .k-label { font-size: 10.5px; padding: 3px 6px; }
   .stages, .facts, .tips, .ckd-banner, .hormones, .raas { grid-template-columns: 1fr; }

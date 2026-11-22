@@ -1,12 +1,15 @@
 import Section from '../components/Section.jsx'
+import { useT } from '../i18n.jsx'
 import { useInView } from '../components/hooks.js'
-import { STAGES, URINE_TABLE } from '../data/content.js'
+// какие ячейки «есть» (зелёные), а какие «нет» (красные): [первичная, конечная]
+const FLAGS = [[1, 1], [1, 0], [1, 0], [0, 0], [0, 0], [1, 1], [1, 1]]
 
 export default function Urine() {
   const [ref, inView] = useInView(0.3)
+  const { STAGES, URINE_TABLE, ui } = useT()
+  const U = ui.urine
   return (
-    <Section id="urine" kicker="Физиология" title="Как образуется моча"
-      lead="Три процесса в нефроне превращают кровь в мочу: фильтрация, обратное всасывание (реабсорбция) и секреция.">
+    <Section id="urine">
       <div className="grid stages">
         {STAGES.map((s) => (
           <div className="card stage" key={s.n}>
@@ -21,23 +24,23 @@ export default function Urine() {
       <div className="card funnel" ref={ref}>
         <div className="vol">
           <div className="tank"><div className="fill" style={{ height: inView ? '100%' : 0, background: 'linear-gradient(#f7e7a0, #e8c76b)' }} /></div>
-          <b>180 л</b><span>первичной мочи за сутки</span>
+          <b>{U.v180}</b><span>{U.primary}</span>
         </div>
-        <div className="arrow-mid"><span className="big">→</span>99% возвращается<br />в кровь</div>
+        <div className="arrow-mid"><span className="big">→</span>{U.back[0]}<br />{U.back[1]}</div>
         <div className="vol">
           <div className="tank"><div className="fill" style={{ height: inView ? '0.9%' : 0, minHeight: inView ? 6 : 0, background: 'linear-gradient(#ffe28a, #e0a93a)' }} /></div>
-          <b>~1,5 л</b><span>конечной мочи за сутки</span>
+          <b>{U.v15}</b><span>{U.final}</span>
         </div>
       </div>
 
       <table className="cmp">
-        <thead><tr><th>Вещество</th><th>Первичная моча</th><th>Конечная моча</th></tr></thead>
+        <thead><tr>{U.head.map((h) => <th key={h}>{h}</th>)}</tr></thead>
         <tbody>
-          {URINE_TABLE.map(([a, b, c]) => (
+          {URINE_TABLE.map(([a, b, c], i) => (
             <tr key={a}>
               <td><b>{a}</b></td>
-              <td className={b.startsWith('да') ? 'yes' : 'no'}>{b}</td>
-              <td className={c.startsWith('да') ? 'yes' : 'no'}>{c}</td>
+              <td className={FLAGS[i][0] ? 'yes' : 'no'}>{b}</td>
+              <td className={FLAGS[i][1] ? 'yes' : 'no'}>{c}</td>
             </tr>
           ))}
         </tbody>

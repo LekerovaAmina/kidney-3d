@@ -7,32 +7,38 @@ import Urine from './sections/Urine.jsx'
 import { Functions, Regulation, BloodSupply } from './sections/Functions.jsx'
 import { Diseases, History, Care } from './sections/Health.jsx'
 import { Facts, Quiz, QR, Sources } from './sections/Fun.jsx'
+import { useLang } from './i18n.jsx'
 
 export default function App() {
+  const { lang, t } = useLang()
+  const H = t.ui.hero
   return (
     <>
       <Nav />
       <header className="hero" id="model">
+        <div className="lab-badge">
+          <span className="lab-ico">🔬</span>
+          <div>
+            <b>{t.ui.lab.title}</b>
+            <span>{t.ui.lab.by}</span>
+          </div>
+        </div>
         <div className="hero-top">
           <div>
-            <div className="kicker">Интерактивный 3D-атлас · биология</div>
-            <h1>Почка — <em>живой фильтр</em> организма</h1>
+            <div className="kicker">{H.kicker}</div>
+            <h1>{H.t1} <em>{H.t2}</em> {H.t3}</h1>
           </div>
           <div>
-            <p className="lead">
-              Вращайте модель, разрежьте её и посмотрите, как устроена почка изнутри: от капсулы и пирамид до
-              сосудов, по которым течёт кровь.
-            </p>
+            <p className="lead">{H.lead}</p>
             <div className="hero-stats">
-              <div><b>~1 млн</b>нефронов</div>
-              <div><b>180 л</b>фильтрата в сутки</div>
-              <div><b>150 г</b>масса</div>
+              {H.stats.map(([v, l]) => <div key={l}><b>{v}</b>{l}</div>)}
             </div>
           </div>
         </div>
         <KidneyExplorer />
       </header>
-      <main>
+      {/* key={lang}: при смене языка квиз и вкладки начинаются заново */}
+      <main key={lang}>
         <Location />
         <Numbers />
         <Nephron />
@@ -48,9 +54,7 @@ export default function App() {
         <QR />
         <Sources />
       </main>
-      <footer className="footer">
-        Учебный проект по биологии · Почка человека · {new Date().getFullYear()}
-      </footer>
+      <footer className="footer">{t.ui.footer} · {new Date().getFullYear()}</footer>
     </>
   )
 }

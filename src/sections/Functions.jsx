@@ -1,10 +1,10 @@
 import Section from '../components/Section.jsx'
-import { FUNCTIONS, RAAS, HORMONES, BLOOD_CHAIN } from '../data/content.js'
+import { useT } from '../i18n.jsx'
 
 export function Functions() {
+  const { FUNCTIONS } = useT()
   return (
-    <Section id="functions" kicker="Зачем нужны почки" title="8 главных функций"
-      lead="Почки — не только «фильтр». Это ещё и химическая лаборатория, и эндокринная железа.">
+    <Section id="functions">
       <div className="grid funcs">
         {FUNCTIONS.map(([ico, c, t, d]) => (
           <div className="card func" key={t}>
@@ -19,9 +19,9 @@ export function Functions() {
 }
 
 export function Regulation() {
+  const { RAAS, HORMONES } = useT()
   return (
-    <Section id="regulation" kicker="Гормоны" title="Как почки регулируют давление и воду"
-      lead="Ренин–ангиотензин–альдостероновая система (РААС) — цепочка, с помощью которой почки поднимают давление, когда его не хватает.">
+    <Section id="regulation">
       <div className="raas">
         {RAAS.map(([t, d], i) => (
           <div className="card" key={t} style={{ animation: `fadeUp .6s ${i * 0.15}s both` }}>
@@ -44,10 +44,10 @@ export function Regulation() {
 }
 
 export function BloodSupply() {
-  const glom = BLOOD_CHAIN.findIndex(([t]) => t === 'Клубочек')
+  const { BLOOD_CHAIN } = useT()
+  const glom = 7 // «Клубочек / Шумақ» — 8-й шаг цепочки
   return (
-    <Section id="blood" kicker="Кровоснабжение" title="Путь крови через почку"
-      lead="Особенность почки — две сети капилляров подряд: сначала клубочек (для фильтрации), затем капилляры вокруг канальцев (для возврата веществ). Следите за потоком.">
+    <Section id="blood">
       <div className="chain">
         {BLOOD_CHAIN.map(([t, s], i) => {
           const venous = i > glom + 2

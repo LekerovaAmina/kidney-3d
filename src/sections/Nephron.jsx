@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Section from '../components/Section.jsx'
-import { NEPHRON_STEPS } from '../data/content.js'
+import { useT } from '../i18n.jsx'
 
 // Пути канальца (координаты SVG 620×600)
 const SEG = {
@@ -34,10 +34,12 @@ function Exchange({ from, to, color, n = 3, dur = 1.6 }) {
 }
 
 function NephronSVG({ active, setActive }) {
+  const { NEPHRON_STEPS, ui } = useT()
+  const N = ui.nephronSvg
   const cls = (id) => 'seg' + (active ? (active === id ? ' hl' : ' dim') : '')
   const col = (id) => NEPHRON_STEPS.find((s) => s.id === id).color
   return (
-    <svg className="nephron-svg" viewBox="0 0 620 600" role="img" aria-label="Схема нефрона">
+    <svg className="nephron-svg" viewBox="0 0 620 600" role="img" aria-label={N.aria}>
       <defs>
         <linearGradient id="capGrad" x1="0" x2="1">
           <stop offset="0" stopColor="#e2503f" />
@@ -52,8 +54,8 @@ function NephronSVG({ active, setActive }) {
       <rect x="0" y="0" width="620" height="250" fill="rgba(160,52,44,0.10)" />
       <rect x="0" y="250" width="620" height="350" fill="rgba(200,100,90,0.05)" />
       <line x1="0" y1="250" x2="620" y2="250" stroke="rgba(255,255,255,0.15)" strokeDasharray="6 6" />
-      <text x="402" y="242" fontSize="11" opacity="0.6">КОРКОВОЕ ВЕЩЕСТВО</text>
-      <text x="402" y="268" fontSize="11" opacity="0.6">МОЗГОВОЕ ВЕЩЕСТВО</text>
+      <text x="402" y="242" fontSize="11" opacity="0.6">{N.cortex}</text>
+      <text x="402" y="268" fontSize="11" opacity="0.6">{N.medulla}</text>
 
       {/* перитубулярный капилляр / прямые сосуды */}
       <path d={CAPILLARY} stroke="url(#capGrad)" strokeWidth="4" fill="none" opacity="0.7" strokeDasharray="10 8">
@@ -99,26 +101,26 @@ function NephronSVG({ active, setActive }) {
       <Exchange from={[545, 480]} to={[590, 480]} color="#8fb0ff" />
 
       {/* подписи */}
-      <text x="14" y="236">Приносящая артериола</text>
-      <text x="30" y="66">Выносящая артериола</text>
-      <text x="34" y="146">Клубочек</text>
-      <text x="120" y="214">Капсула Боумена</text>
-      <text x="200" y="100" fill="#f2c766">Проксимальный каналец</text>
-      <text x="236" y="480" fill="#73d6a4">Петля Генле</text>
-      <text x="400" y="128" fill="#7b98ff">Дистальный каналец</text>
-      <text x="566" y="330" fill="#c9a2ff" transform="rotate(90 566 330)">Собирательная трубка ↓ к сосочку</text>
+      <text x="14" y="236">{N.afferent}</text>
+      <text x="30" y="66">{N.efferent}</text>
+      <text x="34" y="146">{N.glom}</text>
+      <text x="120" y="214">{N.capsule}</text>
+      <text x="200" y="100" fill="#f2c766">{N.pct}</text>
+      <text x="236" y="480" fill="#73d6a4">{N.loop}</text>
+      <text x="400" y="128" fill="#7b98ff">{N.dct}</text>
+      <text x="566" y="330" fill="#c9a2ff" transform="rotate(90 566 330)">{N.cd}</text>
       <text x="14" y="586" fontSize="11">
-        <tspan fill="#8fb0ff">● вода</tspan>  <tspan fill="#f2c766">● соли</tspan>  <tspan fill="#73d6a4">● глюкоза, аминокислоты</tspan>  <tspan fill="#c9a2ff">● секреция</tspan>  <tspan fill="#fff6c4">● фильтрат</tspan>
+        {N.legend.map((l, i) => <tspan key={i} fill={['#8fb0ff', '#f2c766', '#73d6a4', '#c9a2ff', '#fff6c4'][i]}>{l}{'  '}</tspan>)}
       </text>
     </svg>
   )
 }
 
 export default function Nephron() {
+  const { NEPHRON_STEPS } = useT()
   const [active, setActive] = useState('corpuscle')
   return (
-    <Section id="nephron" kicker="Микроскопическое строение" title="Нефрон — фильтр размером с волосок"
-      lead="В каждой почке около миллиона нефронов. Каждый — это микроскопический фильтр с длинной трубочкой, где из крови получается моча. Нажмите на отдел, чтобы узнать, что в нём происходит.">
+    <Section id="nephron">
       <div className="nephron-wrap">
         <NephronSVG active={active} setActive={setActive} />
         <div className="steps">

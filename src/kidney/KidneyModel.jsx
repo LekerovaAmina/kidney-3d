@@ -18,7 +18,7 @@ const stepOf = (part) => BUILD_STEPS.find((s) => s.part === part)
 
 const CUT_OPEN = 0.48 // плоскость отсечения выше почки = разреза нет
 
-export default function KidneyModel({ cut, flow, labels, selected, hovered, onSelect, onHover, buildKey, onBuildStep }) {
+export default function KidneyModel({ parts = PARTS, cut, flow, labels, selected, hovered, onSelect, onHover, buildKey, onBuildStep }) {
   // ---------- геометрия (строится один раз) ----------
   const data = useMemo(() => {
     const pyramids = makePyramids()
@@ -318,10 +318,10 @@ export default function KidneyModel({ cut, flow, labels, selected, hovered, onSe
             <Html key={l.id} position={l.pos} center zIndexRange={[20, 0]}>
               <button
                 className={'k-label' + (selected === l.id ? ' active' : '')}
-                style={{ '--c': PARTS[l.id].color }}
+                style={{ '--c': parts[l.id].color }}
                 onClick={() => onSelect(l.id)}
               >
-                {PARTS[l.id].name.split(' — ')[0]}
+                {parts[l.id].name.split(' — ')[0]}
               </button>
             </Html>
           ))}
